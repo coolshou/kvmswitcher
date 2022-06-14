@@ -1,6 +1,7 @@
 #include "kvmswitcher.h"
 
 #include <QDebug>
+#include <QtGlobal>
 
 kvmswitcher::kvmswitcher(QObject *parent)
     : QObject{parent}
@@ -13,7 +14,12 @@ kvmswitcher::kvmswitcher(QObject *parent)
     if (handle){
         timer->start(2000);
     }else{
-        qDebug() << "no usbhid device (0x10d5, 0x55a4)!!" << Qt::endl;
+        qDebug() << "no usbhid device (0x10d5, 0x55a4)!!" <<
+        #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+            endl;
+        #else
+            Qt::endl;
+        #endif
     }
 
 
@@ -25,8 +31,19 @@ void kvmswitcher::reader()
     unsigned char buf[128];
     res = hid_read(handle, buf, 128);
     if (res>0){
-        qDebug() << "read(" << res << "):"<<buf << Qt::endl;
+        qDebug() << "read(" << res << "):"<<buf <<
+        #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+            endl;
+        #else
+            Qt::endl;
+        #endif
     }else{
-        qDebug() << "no data read!!" << Qt::endl;
+        qDebug() << "no data read!!" <<
+        #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+            endl;
+        #else
+            Qt::endl;
+        #endif
+
     }
 }
