@@ -10,10 +10,12 @@ CONFIG += embed_translations
 # static link
 CONFIG += static
 
+unix:!macx {
 #LIBS += -L$$_PRO_FILE_PWD_/hidapi/  -lhidapi
 CONFIG += link_pkgconfig
 # require libhidapi-dev, libhidapi-libusb,  libusb-1.0-0-dev
 PKGCONFIG += hidapi-libusb libusb-1.0
+}
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
