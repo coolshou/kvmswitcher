@@ -2,6 +2,7 @@
 
 #include <QDebug>
 #include <QtGlobal>
+#include <QThread>
 
 /*
  *
