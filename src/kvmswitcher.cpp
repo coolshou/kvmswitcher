@@ -56,6 +56,7 @@ kvmswitcher::kvmswitcher(QObject *parent)
 {
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(reader()));
+#ifdef Q_OS_LINUX
     res = hid_init();
     // require root to open device!!
     handle = hid_open(0x10d5, 0x55a4, NULL);//# VID, PID, serial
@@ -69,7 +70,7 @@ kvmswitcher::kvmswitcher(QObject *parent)
             Qt::endl;
         #endif
     }
-
+#endif
 
 }
 
