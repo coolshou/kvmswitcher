@@ -18,6 +18,6 @@ int main(int argc, char *argv[])
         }
     }
     kvmswitcher *kvms = new kvmswitcher();
-
+    kvms->triggerKvmSwitch();
     return a.exec();
 }

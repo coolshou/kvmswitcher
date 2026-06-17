@@ -6,12 +6,19 @@
 
 #include <hidapi/hidapi.h>
 
+#ifdef Q_OS_WIN
+#include <windows.h>
+#endif
+
 class kvmswitcher : public QObject
 {
     Q_OBJECT
 public:
     explicit kvmswitcher(QObject *parent = nullptr);
-
+    int write();
+    // #ifdef Q_OS_WIN
+    void simulateKeyStroke(WORD vkCode);
+    // #endif
 public slots:
     void reader();
 
