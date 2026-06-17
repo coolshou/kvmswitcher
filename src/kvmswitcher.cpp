@@ -87,6 +87,7 @@ int kvmswitcher::write()
     res = hid_write(handle, buf, 4);
     return res;
 #endif
+    return 0;
 }
 
 void kvmswitcher::triggerKvmSwitch()
