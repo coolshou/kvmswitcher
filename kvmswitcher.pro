@@ -15,6 +15,9 @@ unix:!macx {
 CONFIG += link_pkgconfig
 # require libhidapi-dev, libhidapi-libusb,  libusb-1.0-0-dev
 PKGCONFIG += hidapi-libusb libusb-1.0
+
+# libx11-dev libxtst-dev
+PKGCONFIG += x11 xtst
 }
 win32 {
     LIBS += -luser32

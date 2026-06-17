@@ -90,20 +90,23 @@ int kvmswitcher::write()
     return 0;
 }
 
+
 void kvmswitcher::triggerKvmSwitch()
 {
     qDebug() << "正在發送 KVM 切換訊號...";
 
     // 第一次 Scroll Lock (按下+放開)
 #ifdef Q_OS_WIN
-    simulateKeyStroke(VK_SCROLL);
-#endif
+    simulateKeyStroke(VK_NUMLOCK);
     // KVM 需要一點點時間反應，延遲 50 ~ 100 毫秒效果最好
     QThread::msleep(50);
-
     // 第二次 Scroll Lock (按下+放開)
-#ifdef Q_OS_WIN
-    simulateKeyStroke(VK_SCROLL);
+    simulateKeyStroke(VK_NUMLOCK);
+#elif defined(Q_OS_LINUX)
+    // Linux 實作
+    simulateKeyStrokeLinux(XK_Num_Lock); // 第一次 Num Lock
+    QThread::msleep(50);
+    simulateKeyStrokeLinux(XK_Num_Lock); // 第二次 Num Lock
 #endif
     qDebug() << "訊號發送完成！";
 }
@@ -125,6 +128,24 @@ void kvmswitcher::simulateKeyStroke(WORD vkCode)
 
     // 送出訊號
     SendInput(2, inputs, sizeof(INPUT));
+}
+#elif defined(Q_OS_LINUX)
+void kvmswitcher::simulateKeyStrokeLinux(KeySym keySym)
+{
+    Display *display = XOpenDisplay(nullptr);
+    if (!display) {
+        qWarning() << "無法開啟 X 顯示器！";
+        return;
+    }
+
+    KeyCode keyCode = XKeysymToKeycode(display, keySym);
+    if (keyCode != 0) {
+        XTestFakeKeyEvent(display, keyCode, True, 0);  // Press
+        XFlush(display);
+        XTestFakeKeyEvent(display, keyCode, False, 0); // Release
+        XFlush(display);
+    }
+    XCloseDisplay(display);
 }
 #endif
 
