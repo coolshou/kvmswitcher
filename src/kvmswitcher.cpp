@@ -76,6 +76,7 @@ kvmswitcher::kvmswitcher(QObject *parent)
 
 int kvmswitcher::write()
 {
+#ifdef Q_OS_LINUX
     int res=0;	// 如果返回-1表示發送失敗
     unsigned char buf[4];
     buf[0] = 0x00;	// 這就是Report ID
@@ -84,6 +85,7 @@ int kvmswitcher::write()
     buf[3] = 0x03;
     res = hid_write(handle, buf, 4);
     return res;
+#endif
 }
 
 void kvmswitcher::triggerKvmSwitch()
@@ -126,6 +128,7 @@ void kvmswitcher::simulateKeyStroke(WORD vkCode)
 
 void kvmswitcher::reader()
 {
+#ifdef Q_OS_LINUX
     int res=0;
     unsigned char buf[128];
     res = hid_read(handle, buf, 128);
@@ -145,4 +148,5 @@ void kvmswitcher::reader()
         #endif
 
     }
+#endif
 }
